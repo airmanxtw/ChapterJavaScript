@@ -37,7 +37,9 @@
 </template>
 
 <script>
+    import {CHECKERMixin} from "../plugins/fieldchecker.1.0.0";
     export default {
+        mixins:[CHECKERMixin],
         data: function () {            
             return {                                
                 loginvalid: false,
@@ -47,12 +49,12 @@
                 userid: '',
                 password: '',
                 useridRules: [
-                    v => CHECKER.blank(v) || '請填寫',
-                    v => CHECKER.maxlength(v , 20) || '已超過20個字元'
+                    v => this.blank(v) || '請填寫',
+                    v => this.maxlength(v , 20) || '已超過20個字元'
                 ],
                 passwordRule: [
-                    v => CHECKER.blank(v) || '請填寫',
-                    v => CHECKER.maxlength(v, 30) || '已超過30個字元'
+                    v => this.blank(v) || '請填寫',
+                    v => this.maxlength(v, 30) || '已超過30個字元'
                 ]
             }
         },
@@ -64,7 +66,7 @@
                     var password = this.password;  
                     var THIS = this;
                     this.loading = true;
-                    axios.get('api/Ldap', {
+                    this.axios.get(this.$store.state.absURL+'api/Ldap', {
                         params: {
                             userid: userid,
                             password: password

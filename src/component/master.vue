@@ -34,19 +34,10 @@
     export default {
         methods:{
             login: function () {
-                var THIS = this;
-                this.loaduser(function () {
-                    if (THIS.$store.state.loginuser.isadmin)
-                        THIS.$emit('getalldirectorys',0);                        
-                    else
-                        THIS.$emit('getalldirectorys',-1);                        
-                });
+                this.$emit("login");
             },
             logout: function () {
-                var THIS = this;
-                this.loaduser(function () {                    
-                    THIS.$emit('getalldirectorys',-1);   
-                });
+                this.$emit("logout");
             },
             clicknavi:function(){
                 this.$emit("clicknavi");

@@ -26,7 +26,7 @@ const TOOLSMixin = {
                     break;
                 }
                 else if (items[index].children != undefined && items[index].children.length > 0) {
-                    rs = finditems(items[index].children, findid);
+                    rs = this.finditems(items[index].children, findid);
                     if (rs != undefined) break;
                 }
             }
@@ -41,7 +41,7 @@ const TOOLSMixin = {
         //新增於平行項目
         addByitems: function(items, additem) {
             items.push(additem);
-            items = sortitems(items);
+            items = this.sortitems(items);
         },
     
         //刪除,實驗
@@ -53,7 +53,7 @@ const TOOLSMixin = {
                     isremove = true;
                 }
                 else if (items[index].children != undefined && items[index].children.length > 0) {                
-                    isremove = delitem(items[index].children, removeid);                
+                    isremove = this.delitem(items[index].children, removeid);                
                 }
                 if (isremove) break;
             }

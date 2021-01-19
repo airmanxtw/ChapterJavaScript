@@ -4,7 +4,7 @@ import store from "./plugins/vuex";
 import CHECKER from "./plugins/fieldchecker.1.0.0";
 import { saveAs } from 'file-saver';
 import axios from "axios";
-import VueAxios from "vue-axios";
+import VueAxios from "vue-axios"; 
 
 Vue.use(VueAxios,axios);
 /* Vue.component('async-webpack-example', function (resolve) {
@@ -20,28 +20,27 @@ Vue.component('master',function (resolve) {
 Vue.component('index',function (resolve) {
     require(['./component/index.vue'], resolve)
 });
-debugger;
+
+
 var vm = new Vue({    
     vuetify,
     store,
     el:"#main",
-    methods:{
-        Set_actionURL:function (val) {
-           this.$store.state.actionURL=val; 
-        },
-        Set_filter:function (val) {
-            this.$store.state.filter=val;
-        },
-        Set_sizelimit:function (val) {
-            this.$store.state.sizelimit=val;
-        },  
-        Set_activeid:function(val){
-            this.$store.state.activeid=val;
+    methods:{        
+        SetConfig:function(config){
+            this.$store.state.actionURL=config.actionURL; 
+            this.$store.state.filter=config.filter;
+            this.$store.state.sizelimit=config.sizelimit;
+            this.$store.state.activeid=config.activeid;
+            this.$store.state.absURL=config.absURL;
+            this.$store.state.copyrightYear=config.copyrightYear;
+            this.$store.state.filter=config.filter;
+            this.$store.state.sizelimit=config.sizelimit;
         }
     },
     components:{
         'mainframe' : function (resolve){require(['./component/mainframe.vue'], resolve)},       
     }
 });
+vm.SetConfig(_config);
 
-vm.Set_activeid(_config.activeid);

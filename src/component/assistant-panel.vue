@@ -132,6 +132,7 @@
     </div> 
 </template>
 <script>
+    let moment = require("moment");
     export default {
         data: function () {
             return {
@@ -161,7 +162,7 @@
         methods: {           
             loaddepts: function () {
                 var THIS = this;
-                axios.get('api/Item/ChiefDepts', {
+                this.axios.get(this.$store.state.absURL+'api/Item/ChiefDepts', {
                     params: {
                         info: this.loginuser.info                    
                     }
@@ -176,7 +177,7 @@
             },
             loadassistant: function () {
                 var THIS = this;
-                axios.get('api/Assistant/MyAssistant', {
+                this.axios.get(this.$store.state.absURL+'api/Assistant/MyAssistant', {
                     params: {
                         info: this.loginuser.info                    
                     }
@@ -203,7 +204,7 @@
                 if (isval) {
                     var THIS = this;
                     this.errmessage = '';
-                    axios.post('api/Assistant?info=' + encodeURIComponent(this.loginuser.info), {
+                    this.axios.post(this.$store.state.absURL+'api/Assistant?info=' + encodeURIComponent(this.loginuser.info), {
                         user_id: this.model,
                         dept_no: this.deptno,
                         deadline: this.deadline                  
@@ -258,7 +259,7 @@
                     this.isLoading = true;
                     var THIS = this;
                     var VAL = val;
-                    axios.get('api/Item/EmpOrStud', {
+                    this.axios.get(this.$store.state.absURL+'api/Item/EmpOrStud', {
                         params: {
                             search: val                    
                         }

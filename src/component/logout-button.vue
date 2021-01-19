@@ -42,7 +42,7 @@
         methods:{
             logout: function () {
                 var THIS = this;                
-                axios.get('api/Ldap/logout').then(function (response) {
+                this.axios.get(this.$store.state.absURL+'api/Ldap/logout').then(function (response) {
                     THIS.dialog = true;
                 }).catch(function (error) {
                         

@@ -1,5 +1,6 @@
 const path = require('path');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const webpack = require('webpack');
 
 module.exports = {
     entry: './src/main.js',
@@ -66,7 +67,11 @@ module.exports = {
     },
     plugins: [        
         // make sure to include the plugin for the magic
-        new VueLoaderPlugin(),                
+        new VueLoaderPlugin(), 
+        new webpack.IgnorePlugin({
+            resourceRegExp: /^\.\/locale$/,        
+            contextRegExp: /moment$/,        
+        }),           
     ],
     resolve: { 
         extensions: ['.js', '.vue'],

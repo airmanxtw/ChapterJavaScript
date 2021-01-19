@@ -70,7 +70,7 @@
             searchstart: function () {
                 var THIS = this;
                 if (this.keyword.trim().length > 0) {
-                    axios.get('api/Search', { params: { id: this.keyword } }).then(function (response) {
+                    this.axios.get(this.$store.state.absURL+'api/Search', { params: { id: this.keyword } }).then(function (response) {
                         THIS.files = response.data;
 
                     }).catch(function (error) {
@@ -83,10 +83,10 @@
             },
             fileitemclick: function (fileid) {
                 var THIS = this;
-                
-                axios.get('api/Auth', { params: { id: fileid, info: this.loginuser.info } }).then(function (response) {                    
+                THIS._fileid=fileid;
+                this.axios.get(this.$store.state.absURL+'api/Auth', { params: { id: fileid, info: this.loginuser.info } }).then(function (response) {                    
                     if (response.data.canopen) {                        
-                        saveAs("home/file/"+fileid);
+                        saveAs(THIS.$store.state.absURL+"home/file/"+THIS._fileid);
                     }
                     else {
                         THIS.messagedialog = true;

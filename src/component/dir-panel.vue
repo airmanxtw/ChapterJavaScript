@@ -126,7 +126,10 @@
 </template>
 
 <script>
+    import {TOOLSMixin} from "../plugins/tools.1.0.1";
+    import {CHECKERMixin} from "../plugins/fieldchecker.1.0.0";
     export default {
+        mixins:[TOOLSMixin,CHECKERMixin],
         props: ["activeid"],
         data: function () {
             return {
@@ -147,11 +150,11 @@
                 dirItems: [],
                 priorityItems:[],
                 nameRules: [
-                    v => CHECKER.blank(v) || '請填寫',
-                    v => CHECKER.maxlength(v, 20) || '已超過20個字元'
+                    v => this.blank(v) || '請填寫',
+                    v => this.maxlength(v, 20) || '已超過20個字元'
                 ],
                 descriptionRules: [                    
-                    v => CHECKER.maxlength(v, 100) || '已超過100個字元'
+                    v => this.maxlength(v, 100) || '已超過100個字元'
                 ],
                 canopen: false,
                 canmodify: false,
@@ -168,7 +171,7 @@
             },
             setauthority: function () {
                 var THIS = this;                
-                axios.get('api/Auth', { params: { id: this.activeid, info: this.loginuser.info } }).then(function (response) {                    
+                this.axios.get(this.$store.state.absURL+'api/Auth', { params: { id: this.activeid, info: this.loginuser.info } }).then(function (response) {                    
                     THIS.canopen = response.data.canopen;
                     THIS.canmodify = response.data.canmodify;                    
                     THIS.hiddenshow = response.data.canopen;
@@ -195,7 +198,7 @@
                 this.candel = true;
                 this.todel = false;
                 this.currentDIR.id = dirid;
-                var target = TOOLS.finditems(this.directorys, dirid);
+                var target = this.finditems(this.directorys, dirid);
                 this.currentDIR.name = target.name;
                 this.currentDIR.description = target.description
                 this.currentDIR.priority = target.priority;
@@ -228,7 +231,7 @@
                         priority: this.currentDIR.priority
                     };   
                     let THIS = this;
-                    axios.post('api/Dir?info=' + encodeURIComponent(this.loginuser.info), P).then(function (response) {                        
+                    this.axios.post(this.$store.state.absURL+'api/Dir?info=' + encodeURIComponent(this.loginuser.info), P).then(function (response) {                        
                         THIS.pushDir(response.data);
                         THIS.$emit('newdir', response.data); 
                         THIS.dirdialog = false;                        
@@ -252,7 +255,7 @@
                     };  
                     
                     let THIS = this;                    
-                    axios.put('api/Dir/' + this.currentDIR.id + '?info=' + encodeURIComponent(this.loginuser.info), P).then(function (response) {                        
+                    this.axios.put(this.$store.state.absURL+'api/Dir/' + this.currentDIR.id + '?info=' + encodeURIComponent(this.loginuser.info), P).then(function (response) {                        
                         THIS.pushDir(response.data);
                         THIS.$emit('upddir', response.data); 
                         THIS.dirdialog = false;                        
@@ -266,8 +269,8 @@
             },
             deleteDir: function () {
                 let THIS = this;                    
-                axios.delete('api/Dir/' + this.currentDIR.id + '?info=' + encodeURIComponent(this.loginuser.info)).then(function (response) {                        
-                    TOOLS.delitem(THIS.directorys, THIS.currentDIR.id);
+                this.axios.delete(this.$store.state.absURL+'api/Dir/' + this.currentDIR.id + '?info=' + encodeURIComponent(this.loginuser.info)).then(function (response) {                        
+                    THIS.delitem(THIS.directorys, THIS.currentDIR.id);
                     THIS.$emit('deldir', THIS.currentDIR.id); 
                     THIS.dirdialog = false;                        
                 }).catch(function (error) {                        
@@ -277,18 +280,18 @@
                 });      
             },
             pushDir: function (newobj) {                
-                TOOLS.delitem(this.directorys, newobj.id);
+                this.delitem(this.directorys, newobj.id);
                 if (newobj.parent_id == this.activeid) {
                     this.directorys.push(newobj);                    
                 }                
-                this.directorys = TOOLS.sortitems(this.directorys);                
+                this.directorys = this.sortitems(this.directorys);                
             },
             changeDirItems: function (val) {
                 this.currentDIR.parent_id = val;
             },
             loadPriorityByParent: function () {
                 var THIS = this;                
-                axios.get('api/Item/PriorityByParent', { params: { activeid: this.activeid } }).then(function (response) {                    
+                this.axios.get(this.$store.state.absURL+'api/Item/PriorityByParent', { params: { activeid: this.activeid } }).then(function (response) {                    
                     THIS.priorityItems = response.data;
                     THIS.changePriority(response.data[0].value);  
                                     
@@ -299,13 +302,14 @@
                 });      
             },
             loadPriority: function (defaultvalue) {
-                var THIS = this;                
-                axios.get('api/Item/Priority', { params: { activeid: this.activeid } }).then(function (response) {                    
+                var THIS = this;  
+                THIS._defaultvalue=defaultvalue;
+                this.axios.get(this.$store.state.absURL+'api/Item/Priority', { params: { activeid: this.activeid } }).then(function (response) {                    
                     THIS.priorityItems = response.data;
-                    if (defaultvalue == undefined)
+                    if (THIS._defaultvalue == undefined)
                         THIS.changePriority(response.data[0].value);                        
                     else
-                        THIS.changePriority(defaultvalue);                         
+                        THIS.changePriority(THIS._defaultvalue);                         
 
                 }).catch(function (error) {
 
@@ -317,13 +321,14 @@
                 this.currentDIR.priority = val;
             },
             loadDirItems: function (defaultvalue) {
-                var THIS = this;                    
-                axios.get('api/Item/MyDirectory', { params: {  info: THIS.loginuser.info } }).then(function (response) {
+                var THIS = this;     
+                THIS._defaultvalue=defaultvalue;
+                this.axios.get(this.$store.state.absURL+'api/Item/MyDirectory', { params: {  info: THIS.loginuser.info } }).then(function (response) {
                     THIS.dirItems = response.data;  
-                    if (defaultvalue == undefined)
+                    if (THIS._defaultvalue == undefined)
                         THIS.changeDirItems(THIS.activeid);
                     else
-                        THIS.changeDirItems(defaultvalue);           
+                        THIS.changeDirItems(THIS._defaultvalue);           
 
                     }).catch(function (error) {
 
@@ -333,7 +338,7 @@
             },
             loadbreadcrumbs: function () {
                 var THIS = this;                
-                axios.get('api/Bread', { params: { dirid: this.activeid, info: this.loginuser.info } }).then(function (response) {                        
+                this.axios.get(this.$store.state.absURL+'api/Bread', { params: { dirid: this.activeid, info: this.loginuser.info } }).then(function (response) {                        
                     THIS.breadcrumbs = response.data;                            
                 }).catch(function (error) {
 
@@ -343,7 +348,7 @@
             },
             loaddirectorys: function () {                    
                 var THIS = this;                    
-                axios.get('api/Dir/DIRS', { params: { dirid: this.activeid, info: THIS.loginuser.info } }).then(function (response) {
+                this.axios.get(this.$store.state.absURL+'api/Dir/DIRS', { params: { dirid: this.activeid, info: THIS.loginuser.info } }).then(function (response) {
                     THIS.directorys = response.data;                        
                     }).catch(function (error) {
 

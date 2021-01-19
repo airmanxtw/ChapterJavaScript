@@ -58,6 +58,7 @@
                                     multiple
                                     show-size
                                     counter
+                                    autofocus
                                     accept=".odt,.pdf,.ods,.odp,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
                                     prepend-icon="mdi-paperclip"
                                     >
@@ -114,6 +115,8 @@
                 files: [],
                 priorityItems: [],
                 priority: 0, 
+                filter: this.$store.state.filter,
+                sizelimit: this.$store.state.sizelimit,
                 showprogress: false,
                 uploaded: 0,                
                 errormessage: '',
@@ -126,12 +129,13 @@
         methods: {
             loadPriority: function (defaultvalue) {
                 var THIS = this;
-                axios.get('api/Item/Priority', { params: { activeid: this.activeid } }).then(function (response) {                    
+                THIS._defaultvalue=defaultvalue;
+                this.axios.get(this.$store.state.absURL+'api/Item/Priority', { params: { activeid: this.activeid } }).then(function (response) {                    
                     THIS.priorityItems = response.data;
-                    if (defaultvalue == undefined)
+                    if (THIS._defaultvalue == undefined)
                         THIS.changePriority(response.data[0].value);
                     else
-                        THIS.changePriority(defaultvalue);
+                        THIS.changePriority(THIS._defaultvalue);
 
                 }).catch(function (error) {
 
@@ -146,14 +150,14 @@
                 this.showprogress = true;
                 this.uploaded = 0;
                 var THIS = this;
-                uploadworks = [];
-                for (i = 0; i < this.files.length; i++) {
+                var uploadworks = [];
+                for (let i = 0; i < this.files.length; i++) {
                     var form = new FormData();
                     form.append('file', this.files[i]);
                     form.append('activeid', this.activeid);
                     form.append('priority', this.priority);                    
                     uploadworks.push(
-                        axios.post('api/File?info=' + encodeURIComponent(this.loginuser.info), form).then(function (response) {
+                        this.axios.post(this.$store.state.absURL+'api/File?info=' + encodeURIComponent(this.loginuser.info), form).then(function (response) {
                             THIS.successfileitems.push(response.data);
                             THIS.successfiles.push(response.data.name);
                             THIS.uploaded += response.data.size;
@@ -185,7 +189,7 @@
                 this.successfileitems = [];
             },
             filterFiles: function (files,acceptfiles,denyfiles) {               
-                for (i = 0; i < files.length; i++) {
+                for (let i = 0; i < files.length; i++) {
                     let obj = files[i];
                     if (this.filter.indexOf(obj.type) > -1 && this.sizelimit >= obj.size)
                         acceptfiles.push(obj);

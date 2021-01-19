@@ -22,6 +22,9 @@
             login: function () {
                 this.$emit('login');
             }
-        },       
+        }, 
+        components:{
+            'login-panel': function (resolve){require(['./login-panel.vue'], resolve)},
+        },         
     }
 </script>

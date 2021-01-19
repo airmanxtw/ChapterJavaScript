@@ -185,7 +185,10 @@
     </v-list>
 </template>
 <script>
+    import {TOOLSMixin} from "../plugins/tools.1.0.1";
+    import {CHECKERMixin} from "../plugins/fieldchecker.1.0.0";
     export default {
+        mixins:[TOOLSMixin,CHECKERMixin],
         props: ["activeid", "uploads","canmodify"],
         data: function () {
             return {
@@ -209,14 +212,14 @@
                 checkall: false,
                 todirid: 0,
                 descriptionRules: [
-                    v => CHECKER.maxlength(v, 100) || '已超過100個字元'
+                    v => this.maxlength(v, 100) || '已超過100個字元'
                 ],
             }
         },
         methods: {
             loadfiles: function () {
                 let THIS = this;                    
-                axios.get('api/File/' + this.activeid + '?info=' + encodeURIComponent(this.loginuser.info)).then(function (response) {                    
+                this.axios.get(this.$store.state.absURL+'api/File/' + this.activeid + '?info=' + encodeURIComponent(this.loginuser.info)).then(function (response) {                    
                     THIS.files = response.data;
                     
                 }).catch(function (error) {                        
@@ -227,7 +230,7 @@
             },
             loadDirItems: function (defaultvalue) {
                 var THIS = this;                    
-                axios.get('api/Item/MyDirectory', { params: {  info: THIS.loginuser.info } }).then(function (response) {
+                this.axios.get(this.$store.state.absURL+'api/Item/MyDirectory', { params: {  info: THIS.loginuser.info } }).then(function (response) {
                     THIS.dirItems = response.data;  
                     if (defaultvalue == undefined)
                         THIS.todirid = THIS.activeid;
@@ -244,13 +247,14 @@
                 this.todirid = val;
             },
             loadPriority: function (defaultvalue) {
-                var THIS = this;                
-                axios.get('api/Item/Priority', { params: { activeid: this.activeid } }).then(function (response) {                    
+                var THIS = this;  
+                THIS._defaultvalue=defaultvalue;
+                this.axios.get(this.$store.state.absURL+'api/Item/Priority', { params: { activeid: this.activeid } }).then(function (response) {                    
                     THIS.priorityItems = response.data;
-                    if (defaultvalue == undefined)
+                    if (THIS._defaultvalue == undefined)
                         THIS.changePriority(response.data[0].value);                        
                     else
-                        THIS.changePriority(defaultvalue);                         
+                        THIS.changePriority(THIS._defaultvalue);                         
 
                 }).catch(function (error) {
 
@@ -269,7 +273,7 @@
                 this.deletedialog = true;
             },
             openmodify: function (fileid) {                
-                var target = TOOLS.finditems(this.files, fileid);
+                var target = this.finditems(this.files, fileid);
                 this.modify_file.id = target.id;
                 this.modify_file.name = target.name;
                 this.modify_file.description = target.description;
@@ -281,9 +285,9 @@
             },
             moveconfirm: function () {
                 var THIS = this;
-                axios.put('api/File/move' + '?info=' + encodeURIComponent(this.loginuser.info) + '&todirid=' + this.todirid, this.checkitem).then(function (response) {
+                this.axios.put(this.$store.state.absURL+'api/File/move' + '?info=' + encodeURIComponent(this.loginuser.info) + '&todirid=' + this.todirid, this.checkitem).then(function (response) {
                     THIS.checkitem.forEach(function (id) {
-                        TOOLS.delitem(THIS.files, id);
+                        THIS.delitem(THIS.files, id);
                     });
                     checkitem = [];
                     THIS.movedialog = false;
@@ -295,9 +299,9 @@
             },
             deleteconfirm: function () {
                 var THIS = this;                
-                axios.put('api/File/delete' + '?info=' + encodeURIComponent(this.loginuser.info) , this.checkitem).then(function (response) {
+                this.axios.put(this.$store.state.absURL+'api/File/delete' + '?info=' + encodeURIComponent(this.loginuser.info) , this.checkitem).then(function (response) {
                     THIS.checkitem.forEach(function (id) {
-                        TOOLS.delitem(THIS.files, id);
+                        this.delitem(THIS.files, id);
                     });
                     checkitem = [];
                     THIS.deletedialog = false;
@@ -311,15 +315,15 @@
                 let isval = this.$refs.dirform.validate();
                 if (isval) {
                     var THIS = this;
-                    axios.put('api/FileInfo/' + this.modify_file.id + '?info=' + encodeURIComponent(this.loginuser.info), this.modify_file).then(function (response) {
-                        var target = TOOLS.finditems(THIS.files, THIS.modify_file.id);
+                    this.axios.put(this.$store.state.absURL+'api/FileInfo/' + this.modify_file.id + '?info=' + encodeURIComponent(this.loginuser.info), this.modify_file).then(function (response) {
+                        var target = THIS.finditems(THIS.files, THIS.modify_file.id);
                         target.description = response.data.description;
                         target.Desc = response.data.Desc;
                         target.keyword = response.data.keyword;
                         target.priority = response.data.priority;                        
                         if (target.sortby != response.data.sortby) {
                             target.sortby = response.data.sortby;
-                            THIS.files = TOOLS.sortitems(THIS.files);
+                            THIS.files = THIS.sortitems(THIS.files);
                         }                                        
                         THIS.modifydialog = false;
                     }).catch(function (error) {
@@ -334,10 +338,10 @@
             },
             fileitemclick: function (fileid) {
                 var THIS = this;
-                
-                axios.get('api/Auth', { params: { id: fileid, info: this.loginuser.info } }).then(function (response) {                    
+                THIS._fileid=fileid;
+                this.axios.get(this.$store.state.absURL+'api/Auth', { params: { id: fileid, info: this.loginuser.info } }).then(function (response) {                    
                     if (response.data.canopen) {                        
-                        saveAs('home/file/'+fileid);
+                        saveAs(THIS.$store.state.absURL+'home/file/'+THIS._fileid);
                     }
                     else {
                         THIS.messagedialog = true;
@@ -370,7 +374,7 @@
             uploads: function (newobj, oldobj) {                
                 for (var i = 0; i < newobj.length; i++)
                     this.files.push(newobj[i]);
-                this.files = TOOLS.sortitems(this.files);
+                this.files = this.sortitems(this.files);
             },
             checkall: function (newval, oldval) {
                 

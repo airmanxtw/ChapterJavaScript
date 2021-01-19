@@ -10,7 +10,12 @@ const opts = {
         filter:'',
         sizelimit:0,
         userinfo:true,
-        activeid:-9
+        activeid:-9,
+        absURL:'',
+        copyrightYear:'',
+        filter:[],
+        sizelimit:0
+
     },
     getters: {
         isguest: function (state) {

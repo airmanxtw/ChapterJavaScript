@@ -1,13 +1,13 @@
 <template>
     <v-app>
-        <master @getalldirectorys="getalldirectorys" @clicknavi="clicknavi"></master>
+        <master @clicknavi="clicknavi" @login="login" @logout="logout"></master>
         <index ref="index"></index>  
     </v-app>
 </template>
 <script>
-    import {TOOLSMixin} from "../plugins/tools.1.0.1";
+    //import {TOOLSMixin} from "../plugins/tools.1.0.1";
     export default {
-        mixins:[TOOLSMixin],
+        //mixins:[TOOLSMixin],
         data: function() {
                 return {
                     userinfo:true                    
@@ -29,33 +29,51 @@
             },
             methods: {    
                 loaduser: function (dosomething) {
-                    //const axios = require('axios');
-                    debugger;
-                    var THIS = this;                                      
-                    this.axios.get('../api/Ldap/info').then(function (response) {                        
+                    
+                    var THIS = this;                        
+                    THIS._dosomething=dosomething;                                                          
+                    this.axios.get(this.$store.state.absURL+'api/Ldap/info').then(function (response) {                                                
                         THIS.$store.state.loginuser = response.data;
-                        dosomething();
+                        THIS._dosomething();                                              
                         }).catch(function (error) {
-
-                        }).then(function () {
-                    });
+                            
+                        }).then(function () {                            
+                    });                     
                 },            
                 openlogindialog: function () {
                     this.$refs.loginb.logindialog = true;
                 },
-                getalldirectorys(val){
+                getalldirectorys: function(val){                                       
                     this.$refs.index.getalldirectorys(val);
                 },
-                clicknavi(){                    
-                    this.$refs.navi.drawer = !this.$refs.navi.drawer;
+                clicknavi:function(){                                      
+                    this.$refs.index.switchdrawer();
+                },
+                login:function(){
+                    var THIS = this;
+                    this.loaduser(function () {
+                        if (THIS.$store.state.loginuser.isadmin)                            
+                            THIS.getalldirectorys(0);
+                        else                                                 
+                            THIS.getalldirectorys(-1);
+                    });
+                },
+                logout:function(){
+                    var THIS = this;
+                    this.loaduser(function () {                                            
+                        THIS.getalldirectorys(-1);
+                    });
                 }
             },
             watch:{
             },
-            created: function () {                
-                this.loaduser(function () { this.getalldirectorys(this.activeid) });                
+            created: function () {                                                                               
+                this.loaduser(function(){this.getalldirectorys(this.activeid)});                
             }    
     }
+
+
+
 </script>
 
 
