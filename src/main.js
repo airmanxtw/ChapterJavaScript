@@ -15,10 +15,10 @@ Vue.use(VueAxios,axios);
 });
  */
 
-import master from "./component/master.vue";
-import index from "./component/index.vue";
-Vue.components("master",master);
-Vue.components("index",index);
+// import master from "./component/master.vue";
+// import index from "./component/index.vue";
+// Vue.components("master",master);
+// Vue.components("index",index);
 
 // 如果兩個組件之間互有關連,不建議一開始就載入異步組件
 // Vue.component('master',function (resolve) {

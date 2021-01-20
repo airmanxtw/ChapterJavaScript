@@ -1,14 +1,23 @@
 import Vue from 'vue'
-import Vuetify from 'vuetify';
-//import Vuetify,{VBtn,VIcon,VAlert,VApp,VCard,VCardText} from 'vuetify/lib';
-import 'Vuetify/dist/vuetify.min.css'; 
+//import Vuetify from 'vuetify';
+import Vuetify,{
+    VDialog,VCard,VCardTitle,VCardText,VCardActions,VSpacer,VBtn,VIcon,VRow,VCol,VDataTable,VChip,VForm,VSelect,VAutocomplete,VMenu,
+    VTextField,VDatePicker,VAlert,VList,VListItem,VNavigationDrawer,VTreeview,VTextarea,VCheckbox,VSubheader,VBreadcrumbs,VDivider,
+    VSlideYTransition,VFileInput,VProgressLinear,VFooter,VApp,VAppBar,VAppBarNavIcon,VToolbarTitle,VMain,VListItemIcon,VListItemContent,
+    VListItemSubtitle,VListItemAction,VListItemTitle
+} from 'vuetify/lib';
 
-/* Vue.use(Vuetify,{
+//如果css不會更動,建議不要載入至js檔
+//import 'Vuetify/dist/vuetify.min.css'; 
+
+Vue.use(Vuetify,{
     components:{
-        VBtn,VIcon,VAlert,VApp,VCard,VCardText
+        VDialog,VCard,VCardTitle,VCardText,VCardActions,VSpacer,VBtn,VIcon,VRow,VCol,VDataTable,VChip,VForm,VSelect,VAutocomplete,VMenu,
+        VTextField,VDatePicker,VAlert,VList,VListItem,VNavigationDrawer,VTreeview,VTextarea,VCheckbox,VSubheader,VBreadcrumbs,VDivider,
+        VSlideYTransition,VFileInput,VProgressLinear,VFooter,VApp,VAppBar,VAppBarNavIcon,VToolbarTitle,VMain,VListItemIcon,VListItemContent,
+        VListItemSubtitle,VListItemAction,VListItemTitle
     }
 });
- */
 
 Vue.use(Vuetify);
 

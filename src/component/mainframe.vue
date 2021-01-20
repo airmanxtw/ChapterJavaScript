@@ -6,6 +6,8 @@
 </template>
 <script>
     //import {TOOLSMixin} from "../plugins/tools.1.0.1";
+    import master from "./master.vue";
+    import index from "./index.vue";
     export default {
         //mixins:[TOOLSMixin],
         data: function() {
@@ -66,7 +68,12 @@
                 }
             },
             watch:{
+
             },
+            components:{
+                master,
+                index
+            },    
             created: function () {                                                                               
                 this.loaduser(function(){this.getalldirectorys(this.activeid)});                
             }    

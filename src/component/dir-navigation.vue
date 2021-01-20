@@ -7,7 +7,7 @@
                         >
         </v-text-field>
         <search-panel ref="searchp"></search-panel>
-        <v-treeview class="mt-n8" transition activatable :items="items" :active.sync="active" :open.sync="openitems">
+        <v-treeview class="mt-n8 mb-8" transition activatable :items="items" :active.sync="active" :open.sync="openitems">
             <template v-slot:prepend="{ open, active }">
                 <v-icon>
                     {{ open || active  ? 'mdi-folder-open' : 'mdi-folder' }}
