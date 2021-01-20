@@ -5,13 +5,13 @@ const webpack = require('webpack');
 module.exports = {
     entry: './src/main.js',
     output: {
-        filename: 'main.0.0.1.js',
+        filename: 'main.0.0.4.js',
         path:'C:/Users/airmanx/source/repos/Chapter/Chapter/Scripts/dist'
         //path: path.resolve(__dirname, 'dist')
 
     },
-    mode: 'development',
-    //mode:'production',
+    //mode: 'development',
+    mode:'production',
     module: {
         rules: [
             {

@@ -289,7 +289,7 @@
                     THIS.checkitem.forEach(function (id) {
                         THIS.delitem(THIS.files, id);
                     });
-                    checkitem = [];
+                    THIS.checkitem = [];
                     THIS.movedialog = false;
                 }).catch(function (error) {
 
@@ -301,13 +301,13 @@
                 var THIS = this;                
                 this.axios.put(this.$store.state.absURL+'api/File/delete' + '?info=' + encodeURIComponent(this.loginuser.info) , this.checkitem).then(function (response) {
                     THIS.checkitem.forEach(function (id) {
-                        this.delitem(THIS.files, id);
+                        THIS.delitem(THIS.files, id);
                     });
-                    checkitem = [];
+                    THIS.checkitem = [];
                     THIS.deletedialog = false;
                 }).catch(function (error) {
 
-                    }).finally(function () {
+                }).finally(function () {
                     // always executed
                 });          
             },
