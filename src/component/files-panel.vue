@@ -134,6 +134,7 @@
             </slot>
         </v-subheader>        
         <v-divider v-if="files.length > 0"></v-divider>
+
         <v-list-item v-if="canmodify && files.length>0">
             <v-list-item-action>
                 <v-row>
@@ -162,44 +163,38 @@
             <v-list-item-content>
             </v-list-item-content>
             <v-list-item-action>
-                <v-checkbox v-model="checkall"></v-checkbox>
+                <v-checkbox v-if="ismobile" v-model="checkall"></v-checkbox>
             </v-list-item-action>
         </v-list-item>
+        
+        <component ref='flist' 
+            v-bind:is="currentFileListComponent"
+            :files="files" :canmodify="canmodify" :ismobile="ismobile" 
+            @fileselct="fileselct" @openmodify="openmodify" @fileitemclick="fileitemclick"
+        >        
+        </component>
 
-        <v-list-item :class="{blue:itemlight(file.id),'lighten-5':itemlight(file.id)}" v-for="file in files" :key="file.id" @click.stop="fileitemclick(file.id)" two-line>
-            <v-list-item-icon>
-                <v-icon v-text="file.icon" large></v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-                <v-list-item-title class="text-md-body-1" v-text="file.name"></v-list-item-title>               
-                <v-list-item-subtitle>{{file.Desc}}</v-list-item-subtitle>               
-            </v-list-item-content>
-            <v-btn icon v-if="canmodify" @click.stop="openmodify(file.id)">
-                <v-icon>mdi-cog-outline</v-icon>
-            </v-btn>
-            <v-list-item-action v-if="canmodify" @click.stop="">
-                <v-checkbox v-model="checkitem" :value="file.id"></v-checkbox>
-            </v-list-item-action>
-
-        </v-list-item>
+     
     </v-list>
 </template>
 <script>
     import {TOOLSMixin} from "../plugins/tools.1.0.1";
     import {CHECKERMixin} from "../plugins/fieldchecker.1.0.0";
+    import FilesTableList from "./files-table-list.vue";
+    import FilesList from "./files-list.vue";
     export default {
         mixins:[TOOLSMixin,CHECKERMixin],
         props: ["activeid", "uploads","canmodify"],
         data: function () {
             return {
-                files: [],
+                files: [],                
                 dirItems:[],
                 checkitem: [],
                 priorityItems:[],
                 movedialog: false,                
                 deletedialog: false,
                 modifydialog: false,
-                messagedialog: false,
+                messagedialog: false,                
                 message:'',
                 modify_file: {
                     id: 0,
@@ -217,13 +212,12 @@
             }
         },
         methods: {
-            loadfiles: function () {
+            loadfiles: function () {                
                 let THIS = this;                    
-                this.axios.get(this.$store.state.absURL+'api/File/' + this.activeid + '?info=' + encodeURIComponent(this.loginuser.info)).then(function (response) {                    
+                this.axios.get(this.$store.state.absURL+'api/File/' + this.activeid + '?info=' + encodeURIComponent(this.loginuser.info)).then(function (response) {                                        
                     THIS.files = response.data;
                     
-                }).catch(function (error) {                        
-                    
+                }).catch(function (error) {                                            
                     }).finally(function () {
                     // always executed
                 });      
@@ -332,10 +326,7 @@
                         // always executed
                     });         
                 }
-            },
-            itemlight: function (id) {
-                return this.checkitem.indexOf(id) > -1 ? true : false;
-            },
+            },           
             fileitemclick: function (fileid) {
                 var THIS = this;
                 THIS._fileid=fileid;
@@ -353,7 +344,15 @@
                 }).finally(function () {
                     // always executed
                 });                
-            }
+            },
+            fileselct:function(obj){                            
+                this.checkitem=[];                
+                var THIS=this;
+                obj.forEach(function(id){
+                    THIS.checkitem.push(id);
+                });              
+            },
+            
         },
         computed: {
             loginuser: function () {
@@ -364,7 +363,23 @@
             },
             canMoveConfirm: function () {
                 return this.activeid == this.todirid ? false : true;
+            },
+            ismobile:function(){
+               switch (this.$vuetify.breakpoint.name) {
+                case 'xs':
+                case 'sm':                       
+                    return true;                    
+                default:
+                    return false;
+               } 
+            },
+            currentFileListComponent:function(){
+                if(this.ismobile)
+                    return "FilesList";
+                else
+                    return "FilesTableList";
             }
+
         },
         watch: {
             activeid: function (newval, oldval) {                
@@ -377,21 +392,27 @@
                 this.files = this.sortitems(this.files);
             },
             checkall: function (newval, oldval) {
-                
-                if (newval) {
-                    let THIS = this;
-                    this.checkitem = [];
-                    this.files.forEach(function (item) {                        
-                        THIS.checkitem.push(item.id);
-                    });
-                }
-                else {
-                    this.checkitem = [];
-                }
+                this.$refs.flist.checkall(newval);
+                // if (newval) {
+                //     let THIS = this;
+                //     this.checkitem = [];
+                //     this.files.forEach(function (item) {                        
+                //         THIS.checkitem.push(item.id);
+                //     });
+                // }
+                // else {
+                //     this.checkitem = [];
+                // }
+            },
+            ismobile: function(){
+                this.checkitem=[];               
             },
             todirid: function (newval, oldval) {
                 
             }
-        },        
+        },
+        components:{
+            FilesTableList,FilesList
+        }       
     }
 </script>

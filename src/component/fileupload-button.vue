@@ -156,6 +156,7 @@
                     form.append('priority', this.priority);                    
                     uploadworks.push(
                         this.axios.post(this.$store.state.absURL+'api/File?info=' + encodeURIComponent(this.loginuser.info), form).then(function (response) {
+                            debugger;
                             THIS.successfileitems.push(response.data);
                             THIS.successfiles.push(response.data.name);
                             THIS.uploaded += response.data.size;
@@ -213,7 +214,7 @@
             totaluploadsize: function () {
                 if (this.files.length > 0) {
                     let tot = 0;
-                    for (i = 0; i < this.files.length; i++)
+                    for (let i = 0; i < this.files.length; i++)
                         tot += this.files[i].size;
                     return tot;
                 }

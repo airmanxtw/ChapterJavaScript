@@ -32,9 +32,11 @@
                                     第{{pageStart}}筆至{{pageStop}}第筆,共{{itemsLength}}筆
                                 </template>    
                                 <template v-slot:item.deadline="{item}">
-                                    {{item.deadline}}                                    
+                                    {{item.deadline}}
+                                                                        
                                     <v-chip color="red" class="white--text" small v-if="item.isexpired">已過期</v-chip>
                                 </template>
+                                
                             </v-data-table>
                         </v-col>
                     </v-row>

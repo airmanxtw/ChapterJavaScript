@@ -14,12 +14,15 @@
     "@babel/core": "^7.12.10",
     "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
+    "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-vue": "^2.0.2",
+    "core-js": "^3.8.3",
     "css-loader": "^5.0.1",
     "file-loader": "^6.2.0",
     "file-saver": "^2.0.5",
     "moment": "^2.29.1",
+    "regenerator-runtime": "^0.13.7",
     "style-loader": "^2.0.0",
     "vue": "^2.6.12",
     "vue-axios": "^3.2.2",
@@ -33,6 +36,7 @@
     "webpack-cli": "^4.3.1"
   },
   "devDependencies": {
+    "@babel/preset-env": "^7.12.11",
     "deepmerge": "^4.2.2",
     "sass": "^1.32.4",
     "sass-loader": "^10.1.1"

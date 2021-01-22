@@ -83,8 +83,9 @@
             </v-dialog>
 
 
-            <v-list dense>
-                <v-subheader class="text-md-body-1">
+            <v-list id="dirpaneldiv" dense>
+                <v-subheader class="text-md-body-1" v-scroll="onScroll">
+                    
                     目錄
                     <v-breadcrumbs :items="breadcrumbs">
                         <template v-slot:item="{item}">
@@ -113,6 +114,8 @@
             </v-list>
 
             <files-panel v-if="canopen" :activeid="activeid" :uploads="uploads" :canmodify="canmodify">檔案</files-panel>
+           
+
         </div>
         <v-card v-show="!hiddenshow" class="mx-auto my-12" max-width="374">
             <v-card-title>
@@ -120,14 +123,27 @@
                     mdi-eye-off
                 </v-icon>
                 無權限讀取此目錄,{{prioritydesc}}
-            </v-card-title>
+            </v-card-title>            
         </v-card>
+
+        <v-speed-dial v-if="showtop" bottom right absolute>
+            <template v-slot:activator>
+                <v-btn color="blue lighten-4" fab>
+                    <v-icon>
+                        mdi-arrow-up-thick
+                    </v-icon>
+                </v-btn>            
+            </template>            
+        </v-speed-dial>
+        
+
     </div>
 </template>
 
 <script>
     import {TOOLSMixin} from "../plugins/tools.1.0.1";
     import {CHECKERMixin} from "../plugins/fieldchecker.1.0.0";
+    import FilesPanel from "./files-panel.vue";
     export default {
         mixins:[TOOLSMixin,CHECKERMixin],
         props: ["activeid"],
@@ -162,10 +178,17 @@
                 prioritydesc:'',
                 candel: false,
                 todel: false,
-                uploads:[]
+                uploads:[],
+                showtop:false
             }
         },
         methods: {
+            onScroll (e) {
+                
+                if (typeof window === 'undefined') return                
+                const top = window.pageYOffset ||   e.target.scrollTop || 0 ;
+                this.showtop = top > 20;
+            },
             listitemclick: function (id) {
                 this.$emit("dirclick", id);
             },
@@ -401,7 +424,8 @@
         },
         components:{
             'fileupload-button': function (resolve){require(['./fileupload-button.vue'], resolve)},
-            'files-panel':function (resolve){require(['./files-panel.vue'], resolve)},
+            FilesPanel
+            //'files-panel':function (resolve){require(['./files-panel.vue'], resolve)},
         },          
     }
 </script>

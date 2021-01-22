@@ -8,12 +8,14 @@
                 <v-col class="text-center" cols="12">
                     版權所有 © {{$store.state.copyrightYear}} 南臺科技大學
                 </v-col>
-            </v-footer>
+            </v-footer>            
         </v-main>
     </div>
 </template>
 <script>
     import {TOOLSMixin} from "../plugins/tools.1.0.1";
+    import DirNavigation from "./dir-navigation.vue";
+    import DirPanel from "./dir-panel.vue";
     export default {
         mixins:[TOOLSMixin],
         data:function(){
@@ -90,8 +92,8 @@
             }
         },
         components:{
-            'dir-navigation': function (resolve){require(['./dir-navigation.vue'], resolve)},
-            'dir-panel':function (resolve){require(['./dir-panel.vue'], resolve)},
+            DirNavigation,
+            DirPanel
         },      
     }
 </script>
