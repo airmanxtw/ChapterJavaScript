@@ -7,7 +7,7 @@ const mainjs={
         main:['./src/main.js'],            
     },    
     output: {
-        filename: '[name].0.3.1.js',
+        filename: '[name].0.3.2.js',
         path:'C:/Users/airmanx/source/repos/Chapter/Chapter/Scripts/dist'
         //path: path.resolve(__dirname, 'dist')
 
@@ -89,7 +89,7 @@ const mainforIEjs={
         mainforIE:['babel-polyfill','./src/mainforIE.js'],
     },    
     output: {
-        filename: '[name].0.3.1.js',
+        filename: '[name].0.3.2.js',
         path:'C:/Users/airmanx/source/repos/Chapter/Chapter/Scripts/dist'
         //path: path.resolve(__dirname, 'dist')
 

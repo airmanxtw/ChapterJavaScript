@@ -7,7 +7,7 @@
             </v-list-item-icon>
             <v-list-item-content>
                 <v-list-item-title class="text-md-body-1" v-text="file.name"></v-list-item-title>               
-                <v-list-item-subtitle>{{file.Desc}}</v-list-item-subtitle>               
+                <v-list-item-subtitle>{{file.sizeDesc}} 下載{{file.download}}次 {{file.Desc}}</v-list-item-subtitle>               
             </v-list-item-content>
             <v-btn icon v-if="canmodify" @click.stop="openmodify(file.id)">
                 <v-icon>mdi-cog-outline</v-icon>
@@ -20,39 +20,34 @@
 </template>
 <script>
     export default {
-        props:["files","canmodify"],
-        data:function()
-        {
-            return {
-                localCheckitem:[]
-            }
-        },
+        props:["files","canmodify","checkitem"],        
         methods:{           
             openmodify: function(id){
                 this.$emit("openmodify",id);
             },
-            fileitemclick:function(obj){
-                this.$emit("fileitemclick",obj.id);
+            fileitemclick:function(obj){                
+                this.$emit("fileitemclick",obj);
             },
             itemlight:function(id){
                 return this.localCheckitem.indexOf(id) > -1 ? true : false;
-            },
-            checkall:function(ck){
-                this.localCheckitem=[];
-                var THIS=this;
-                if(ck){
-                    this.files.forEach(function(file){
-                        THIS.localCheckitem.push(file.id);
-                    })
+            },          
+        },
+        computed:{
+            localCheckitem:{
+                get:function(){
+                    return this.checkitem;
+                },
+                set:function(val){
+                    this.$emit('update:checkitem',val);
                 }
             }
         },
         watch:{
-            localCheckitem:function(newval,oldval)
-            {
-                debugger;
-                this.$emit("fileselct",newval);                
-            }
+            // localCheckitem:function(newval,oldval)
+            // {
+            //     this.$emit("update:checkitem",newval);
+            //     //this.$emit("fileselct",newval);                
+            // }
         }
     }
 </script>

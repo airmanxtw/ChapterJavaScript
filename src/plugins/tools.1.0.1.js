@@ -1,5 +1,4 @@
-﻿
-const TOOLSMixin = {
+﻿const TOOLSMixin = {
     methods:{
         sortitems: function(items) {        
             var newitems = items.sort(function (a, b) {            
@@ -66,7 +65,7 @@ const TOOLSMixin = {
             if (olditem.sortby != newitem.sortby) olditem.sortby = newitem.sortby;
             if (olditem.parent_id != newitem.parent_id) olditem.parent_id = newitem.parent_id;
             if (olditem.priority != newitem.priority) olditem.priority = newitem.priority;
-        },
+        },            
         test: function(){
             return "**test**";
         },

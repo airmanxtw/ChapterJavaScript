@@ -169,8 +169,8 @@
         
         <component ref='flist' 
             v-bind:is="currentFileListComponent"
-            :files="files" :canmodify="canmodify" :ismobile="ismobile" 
-            @fileselct="fileselct" @openmodify="openmodify" @fileitemclick="fileitemclick"
+            :files="files" :canmodify="canmodify" :ismobile="ismobile" :checkitem.sync="checkitem" 
+            @openmodify="openmodify" @fileitemclick="fileitemclick"
         >        
         </component>
 
@@ -309,12 +309,9 @@
                 let isval = this.$refs.dirform.validate();
                 if (isval) {
                     var THIS = this;
-                    this.axios.put(this.$store.state.absURL+'api/FileInfo/' + this.modify_file.id + '?info=' + encodeURIComponent(this.loginuser.info), this.modify_file).then(function (response) {
+                    this.axios.put(this.$store.state.absURL+'api/FileInfo/' + this.modify_file.id + '?info=' + encodeURIComponent(this.loginuser.info), this.modify_file).then(function (response) {                        
                         var target = THIS.finditems(THIS.files, THIS.modify_file.id);
-                        target.description = response.data.description;
-                        target.Desc = response.data.Desc;
-                        target.keyword = response.data.keyword;
-                        target.priority = response.data.priority;                        
+                        Object.assign(target,response.data);
                         if (target.sortby != response.data.sortby) {
                             target.sortby = response.data.sortby;
                             THIS.files = THIS.sortitems(THIS.files);
@@ -328,30 +325,29 @@
                 }
             },           
             fileitemclick: function (fileid) {
-                var THIS = this;
-                THIS._fileid=fileid;
-                this.axios.get(this.$store.state.absURL+'api/Auth', { params: { id: fileid, info: this.loginuser.info } }).then(function (response) {                    
-                    if (response.data.canopen) {                        
-                        saveAs(THIS.$store.state.absURL+'home/file/'+THIS._fileid);
+
+                var THIS = this;                                
+                this.axios.get(this.$store.state.absURL+'api/Auth', { params: { id: fileid, info: this.loginuser.info,counter:true } }).then(function (response) {                    
+                    if (response.data.canopen) {                           
+                        saveAs(THIS.$store.state.absURL+'home/file/'+fileid);                                           
+                        THIS.axios.get(THIS.$store.state.absURL+'api/FileInfo',{params:{id:fileid}}).then(function(res){                            
+                            var target=THIS.finditems(THIS.files,fileid);                            
+                            Object.assign(target,res.data);
+                            //target.download = res.data.download;
+                            //debugger;
+                        });
                     }
                     else {
                         THIS.messagedialog = true;
                         THIS.message = "您無此權限下載該檔案";
                     }
-                }).catch(function (error) {
+                }).catch(function (error) {                    
                     THIS.messagedialog = true;
                     THIS.message = error.response.data;
                 }).finally(function () {
                     // always executed
                 });                
-            },
-            fileselct:function(obj){                            
-                this.checkitem=[];                
-                var THIS=this;
-                obj.forEach(function(id){
-                    THIS.checkitem.push(id);
-                });              
-            },
+            },           
             
         },
         computed: {
@@ -373,7 +369,7 @@
                     return false;
                } 
             },
-            currentFileListComponent:function(){
+            currentFileListComponent:function(){                
                 if(this.ismobile)
                     return "FilesList";
                 else
@@ -391,21 +387,19 @@
                     this.files.push(newobj[i]);
                 this.files = this.sortitems(this.files);
             },
-            checkall: function (newval, oldval) {
-                this.$refs.flist.checkall(newval);
-                // if (newval) {
-                //     let THIS = this;
-                //     this.checkitem = [];
-                //     this.files.forEach(function (item) {                        
-                //         THIS.checkitem.push(item.id);
-                //     });
-                // }
-                // else {
-                //     this.checkitem = [];
-                // }
+            checkall: function (newval, oldval) {                
+                if (newval) {
+                    let THIS = this;
+                    this.checkitem = [];
+                    this.files.forEach(function (item) {                        
+                        THIS.checkitem.push(item.id);
+                    });
+                }
+                else {
+                    this.checkitem = [];
+                }
             },
-            ismobile: function(){
-                this.checkitem=[];               
+            ismobile: function(){                                            
             },
             todirid: function (newval, oldval) {
                 
