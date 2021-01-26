@@ -33,30 +33,17 @@ Vue.use(VueAxios,axios);
 //     require(['./component/index.vue'], resolve)
 // });
 
-const arr = ['Roya', 'Owen', 'Eric'];
-
-const index = arr.findIndex((item) => item === 'Owen');
-
-
+//import mainframe from "./component/mainframe.vue";
 var vm = new Vue({    
     vuetify,
     store,
     el:"#main",
-    methods:{        
-        SetConfig:function(config){
-            this.$store.state.actionURL=config.actionURL; 
-            this.$store.state.filter=config.filter;
-            this.$store.state.sizelimit=config.sizelimit;
-            this.$store.state.activeid=config.activeid;
-            this.$store.state.absURL=config.absURL;
-            this.$store.state.copyrightYear=config.copyrightYear;
-            this.$store.state.filter=config.filter;
-            this.$store.state.sizelimit=config.sizelimit;
-        }
+    methods:{                
     },
     components:{
-        'mainframe' : function (resolve){require(['./component/mainframe.vue'], resolve)},       
+        'mainframe' : function (resolve){require(['./component/mainframe.vue'], resolve)},               
+        'mainframeforfile':function (resolve){require(['./component/mainframeforfile.vue'], resolve)}
     }
 });
-vm.SetConfig(_config);
+//vm.SetConfig(_config);
 

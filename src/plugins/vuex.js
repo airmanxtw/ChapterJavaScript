@@ -6,16 +6,14 @@ Vue.use(Vuex);
 const opts = {  
     state: {
         loginuser: {},
-        actionURL:'',
-        filter:'',
-        sizelimit:0,
+        actionURL: _config.actionURL,
+        filter: _config.filter,
+        sizelimit: _config.sizelimit,
         userinfo:true,
-        activeid:-9,
-        absURL:'',
-        copyrightYear:'',
-        filter:[],
-        sizelimit:0
-
+        activeid: _config.activeid,
+        absURL: _config.absURL,
+        copyrightYear: _config.copyrightYear,
+        filter: _config.filter,        
     },
     getters: {
         isguest: function (state) {
@@ -31,5 +29,4 @@ const opts = {
         //}
     }  
 };
-
 export default new Vuex.Store(opts);
