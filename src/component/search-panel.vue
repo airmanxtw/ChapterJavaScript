@@ -81,7 +81,9 @@ export default {
       var THIS = this;
       if (this.keyword.trim().length > 0) {
         this.axios
-          .get(this.$store.state.absURL + "api/Search", { params: { id: this.keyword } })
+          .get(this.$store.state.absURL + "api/Search", {
+            params: { id: this.keyword, info: THIS.loginuser.info },
+          })
           .then(function (response) {
             THIS.files = response.data;
           })
@@ -97,7 +99,7 @@ export default {
       THIS._fileid = fileid;
       this.axios
         .get(this.$store.state.absURL + "api/Auth", {
-          params: { id: fileid, info: this.loginuser.info },
+          params: { id: fileid, info: this.loginuser.info, counter: true },
         })
         .then(function (response) {
           if (response.data.canopen) {

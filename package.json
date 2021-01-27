@@ -19,6 +19,7 @@
     "babel-preset-vue": "^2.0.2",
     "core-js": "^3.8.3",
     "css-loader": "^5.0.1",
+    "event-source-polyfill": "^1.0.22",
     "file-loader": "^6.2.0",
     "file-saver": "^2.0.5",
     "moment": "^2.29.1",
