@@ -7,7 +7,7 @@ const mainjs={
         main:['./src/main.js'],            
     },    
     output: {
-        filename: '[name].0.3.6.js',
+        filename: '[name].0.3.7.js',
         path:'C:/Users/airmanx/source/repos/Chapter/Chapter/Scripts/dist'
         //path: path.resolve(__dirname, 'dist')
 
@@ -73,7 +73,7 @@ const mainjs={
         new webpack.IgnorePlugin({
             resourceRegExp: /^\.\/locale$/,        
             contextRegExp: /moment$/,        
-        }),           
+        }),        
     ],
     resolve: { 
         extensions: ['.js', '.vue'],
@@ -89,7 +89,7 @@ const mainforIEjs={
         mainforIE:['babel-polyfill','./src/mainforIE.js'],
     },    
     output: {
-        filename: '[name].0.3.6.js',
+        filename: '[name].0.3.7.js',
         path:'C:/Users/airmanx/source/repos/Chapter/Chapter/Scripts/dist'
         //path: path.resolve(__dirname, 'dist')
 
