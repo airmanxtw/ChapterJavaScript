@@ -6,7 +6,7 @@ import Vuetify,{
     VSlideYTransition,VFileInput,VProgressLinear,VFooter,VApp,VAppBar,VAppBarNavIcon,VToolbarTitle,VMain,VListItemIcon,VListItemContent,
     VListItemSubtitle,VListItemAction,VListItemTitle,VSlider,VSwitch,VSpeedDial,VSnackbar,VContainer
 } from 'vuetify/lib';
-import { Scroll } from 'vuetify/lib/directives'
+import { Scroll } from 'vuetify/lib/directives';
 
 //如果css不會更動,建議不要載入至js檔
 //import 'Vuetify/dist/vuetify.min.css'; 
@@ -20,12 +20,14 @@ Vue.use(Vuetify,{
     },
     directives:{
         Scroll
-    }
+    },
+
 });
 
-Vue.use(Vuetify);
+//Vue.use(Vuetify);
 
-const opts = {    
+const opts = { 
+   
 };
 
 export default new Vuetify(opts);

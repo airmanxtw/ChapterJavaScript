@@ -8,6 +8,7 @@
 //import {TOOLSMixin} from "../plugins/tools.1.0.1";
 import master from "./master.vue";
 import index from "./index.vue";
+import { mapMutations, mapState } from "vuex";
 export default {
   //mixins:[TOOLSMixin],
   data: function () {
@@ -16,26 +17,17 @@ export default {
     };
   },
   computed: {
-    isguest: function () {
-      return this.$store.getters.isguest;
-    },
-    ischief: function () {
-      return this.$store.getters.ischief;
-    },
-    loginuser: function () {
-      return this.$store.state.loginuser;
-    },
-    activeid: function () {
-      return this.$store.state.activeid;
-    },
+    ...mapState(["isguest", "ischief", "loginuser", "activeid"]),
   },
   methods: {
+    ...mapMutations(["setUser"]),
     loaduser: function (dosomething) {
       var THIS = this;
-      THIS._dosomething = dosomething;      
-      this.axios.get(this.$store.state.absURL + "api/Ldap/info")
+      THIS._dosomething = dosomething;
+      this.axios
+        .get(this.$store.state.absURL + "api/Ldap/info")
         .then(function (response) {
-          THIS.$store.state.loginuser = response.data;
+          THIS.setUser(response.data);
           THIS._dosomething();
         })
         .catch(function (error) {})

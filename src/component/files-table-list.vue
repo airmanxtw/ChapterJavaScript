@@ -16,7 +16,7 @@
       <v-icon v-text="item.icon"></v-icon>
     </template>
     <template v-slot:item.share="{ item }">
-      <file-share :url="absURL() + 'home/file/' + item.id" :name="item.name"></file-share>
+      <file-share :url="URL() + 'home/file/' + item.id" :name="item.name"></file-share>
     </template>
     <template v-slot:item.createDate="{ item }">
       {{ item.createDate }}
@@ -27,6 +27,7 @@
   </v-data-table>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   props: ["files", "canmodify", "checkitem"],
   data: function () {
@@ -73,6 +74,7 @@ export default {
         return THIS.temparray;
       },
     },
+    ...mapState(["absURL"]),
   },
   methods: {
     filetableselct: function (obj) {
@@ -89,8 +91,8 @@ export default {
     fileitemclick: function (obj) {
       this.$emit("fileitemclick", obj.id);
     },
-    absURL: function () {
-      return window.location.origin + this.$store.state.absURL;
+    URL: function () {
+      return window.location.origin + this.absURL;
     },
   },
   components: {

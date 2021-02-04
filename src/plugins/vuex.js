@@ -23,10 +23,10 @@ const opts = {
             return state.loginuser.ischief;
         }
     },
-    mutations: {
-        //add: function (state) {
-        //    state.counter += 2;
-        //}
+    mutations: {        
+        setUser:function(state,user){            
+            state.loginuser=user;
+        }
     }  
 };
 export default new Vuex.Store(opts);

@@ -171,6 +171,7 @@
 import { TOOLSMixin } from "../plugins/tools.1.0.1";
 import { CHECKERMixin } from "../plugins/fieldchecker.1.0.0";
 import FilesPanel from "./files-panel.vue";
+import { mapState } from "vuex";
 export default {
   mixins: [TOOLSMixin, CHECKERMixin],
   props: ["activeid"],
@@ -219,7 +220,7 @@ export default {
     setauthority: function () {
       var THIS = this;
       this.axios
-        .get(this.$store.state.absURL + "api/Auth", {
+        .get(this.absURL + "api/Auth", {
           params: { id: this.activeid, info: this.loginuser.info },
         })
         .then(function (response) {
@@ -279,9 +280,7 @@ export default {
         let THIS = this;
         this.axios
           .post(
-            this.$store.state.absURL +
-              "api/Dir?info=" +
-              encodeURIComponent(this.loginuser.info),
+            this.absURL + "api/Dir?info=" + encodeURIComponent(this.loginuser.info),
             P
           )
           .then(function (response) {
@@ -312,7 +311,7 @@ export default {
         let THIS = this;
         this.axios
           .put(
-            this.$store.state.absURL +
+            this.absURL +
               "api/Dir/" +
               this.currentDIR.id +
               "?info=" +
@@ -336,7 +335,7 @@ export default {
       let THIS = this;
       this.axios
         .delete(
-          this.$store.state.absURL +
+          this.absURL +
             "api/Dir/" +
             this.currentDIR.id +
             "?info=" +
@@ -367,7 +366,7 @@ export default {
     loadPriorityByParent: function () {
       var THIS = this;
       this.axios
-        .get(this.$store.state.absURL + "api/Item/PriorityByParent", {
+        .get(this.absURL + "api/Item/PriorityByParent", {
           params: { activeid: this.activeid },
         })
         .then(function (response) {
@@ -383,7 +382,7 @@ export default {
       var THIS = this;
       THIS._defaultvalue = defaultvalue;
       this.axios
-        .get(this.$store.state.absURL + "api/Item/Priority", {
+        .get(this.absURL + "api/Item/Priority", {
           params: { activeid: this.activeid },
         })
         .then(function (response) {
@@ -404,7 +403,7 @@ export default {
       var THIS = this;
       THIS._defaultvalue = defaultvalue;
       this.axios
-        .get(this.$store.state.absURL + "api/Item/MyDirectory", {
+        .get(this.absURL + "api/Item/MyDirectory", {
           params: { info: THIS.loginuser.info },
         })
         .then(function (response) {
@@ -420,7 +419,7 @@ export default {
     loadbreadcrumbs: function () {
       var THIS = this;
       this.axios
-        .get(this.$store.state.absURL + "api/Bread", {
+        .get(this.absURL + "api/Bread", {
           params: { dirid: this.activeid, info: this.loginuser.info },
         })
         .then(function (response) {
@@ -434,7 +433,7 @@ export default {
     loaddirectorys: function () {
       var THIS = this;
       this.axios
-        .get(this.$store.state.absURL + "api/Dir/DIRS", {
+        .get(this.absURL + "api/Dir/DIRS", {
           params: { dirid: this.activeid, info: THIS.loginuser.info },
         })
         .then(function (response) {
@@ -460,12 +459,6 @@ export default {
     },
   },
   computed: {
-    isauth: function () {
-      return this.$store.getters.isauth;
-    },
-    loginuser: function () {
-      return this.$store.state.loginuser;
-    },
     is_dirdialog_message: function () {
       return this.dirdialog_message.length == 0 ? false : true;
     },
@@ -475,6 +468,7 @@ export default {
     dirdialogtitle: function () {
       return this.currentDIR.id == -1 ? "新增目錄" : "修改目錄";
     },
+    ...mapState(["isauth", "absURL", "loginuser"]),
   },
   watch: {
     activeid: function (newvalue, oldvalue) {

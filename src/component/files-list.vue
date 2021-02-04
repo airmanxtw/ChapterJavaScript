@@ -20,7 +20,7 @@
       <v-btn icon v-if="canmodify" @click.stop="openmodify(file.id)">
         <v-icon>mdi-cog-outline</v-icon>
       </v-btn>
-      <file-share :url="absURL() + 'home/file/' + file.id" :name="file.name"></file-share>
+      <file-share :url="URL() + 'home/file/' + file.id" :name="file.name"></file-share>
       <v-list-item-action v-if="canmodify" @click.stop="">
         <v-checkbox v-model="localCheckitem" :value="file.id"></v-checkbox>
       </v-list-item-action>
@@ -28,6 +28,7 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   props: ["files", "canmodify", "checkitem"],
   methods: {
@@ -40,8 +41,8 @@ export default {
     itemlight: function (id) {
       return this.localCheckitem.indexOf(id) > -1 ? true : false;
     },
-    absURL: function () {
-      return window.location.origin + this.$store.state.absURL;
+    URL: function () {
+      return window.location.origin + this.absURL;
     },
   },
   computed: {
@@ -53,6 +54,7 @@ export default {
         this.$emit("update:checkitem", val);
       },
     },
+    ...mapState(["absURL"]),
   },
   watch: {},
   components: {

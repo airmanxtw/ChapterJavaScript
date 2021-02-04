@@ -142,6 +142,7 @@
 </template>
 <script>
 let moment = require("moment");
+import { mapState } from "vuex";
 export default {
   data: function () {
     return {
@@ -171,7 +172,7 @@ export default {
     loaddepts: function () {
       var THIS = this;
       this.axios
-        .get(this.$store.state.absURL + "api/Item/ChiefDepts", {
+        .get(this.absURL + "api/Item/ChiefDepts", {
           params: {
             info: this.loginuser.info,
           },
@@ -186,7 +187,7 @@ export default {
     loadassistant: function () {
       var THIS = this;
       this.axios
-        .get(this.$store.state.absURL + "api/Assistant/MyAssistant", {
+        .get(this.absURL + "api/Assistant/MyAssistant", {
           params: {
             info: this.loginuser.info,
           },
@@ -207,16 +208,13 @@ export default {
       this.loaddepts();
     },
     addconfirm: function () {
-      //var man = this.$refs.vauto.model;
       let isval = this.$refs.addform.validate();
       if (isval) {
         var THIS = this;
         this.errmessage = "";
         this.axios
           .post(
-            this.$store.state.absURL +
-              "api/Assistant?info=" +
-              encodeURIComponent(this.loginuser.info),
+            this.absURL + "api/Assistant?info=" + encodeURIComponent(this.loginuser.info),
             {
               user_id: this.model,
               dept_no: this.deptno,
@@ -266,7 +264,7 @@ export default {
       var THIS = this;
       THIS._item = item;
       this.axios
-        .delete(this.$store.state.absURL + "api/Assistant/", {
+        .delete(this.absURL + "api/Assistant/", {
           params: {
             info: this.loginuser.info,
             id: item.user_id,
@@ -286,9 +284,6 @@ export default {
     },
   },
   computed: {
-    loginuser: function () {
-      return this.$store.state.loginuser;
-    },
     iserr: function () {
       return this.errmessage.length > 0 ? true : false;
     },
@@ -298,6 +293,7 @@ export default {
     dialogconfirmtitle: function () {
       return this.disabledauto ? "儲存" : "新增";
     },
+    ...mapState(["absURL", "loginuser"]),
   },
   watch: {
     search: function (val) {
@@ -312,7 +308,7 @@ export default {
         var THIS = this;
         var VAL = val;
         this.axios
-          .get(this.$store.state.absURL + "api/Item/EmpOrStud", {
+          .get(this.absURL + "api/Item/EmpOrStud", {
             params: {
               search: val,
             },

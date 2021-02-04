@@ -60,6 +60,7 @@
   </v-dialog>
 </template>
 <script>
+import { mapState } from "vuex";
 export default {
   data: function () {
     return {
@@ -81,7 +82,7 @@ export default {
       var THIS = this;
       if (this.keyword.trim().length > 0) {
         this.axios
-          .get(this.$store.state.absURL + "api/Search", {
+          .get(this.absURL + "api/Search", {
             params: { id: this.keyword, info: THIS.loginuser.info },
           })
           .then(function (response) {
@@ -98,12 +99,12 @@ export default {
       var THIS = this;
       THIS._fileid = fileid;
       this.axios
-        .get(this.$store.state.absURL + "api/Auth", {
+        .get(this.absURL + "api/Auth", {
           params: { id: fileid, info: this.loginuser.info, counter: true },
         })
         .then(function (response) {
           if (response.data.canopen) {
-            saveAs(THIS.$store.state.absURL + "home/file/" + THIS._fileid);
+            saveAs(THIS.absURL + "home/file/" + THIS._fileid);
           } else {
             THIS.messagedialog = true;
             THIS.message = "您無此權限下載該檔案";
@@ -118,13 +119,11 @@ export default {
         });
     },
     absURL: function () {
-      return window.location.origin + this.$store.state.absURL;
+      return window.location.origin + this.absURL;
     },
   },
   computed: {
-    loginuser: function () {
-      return this.$store.state.loginuser;
-    },
+    ...mapState(["absURL", "loginuser"]),
   },
   components: {
     "file-share": function (resolve) {
