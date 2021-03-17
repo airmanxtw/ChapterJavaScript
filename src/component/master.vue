@@ -6,7 +6,7 @@
       </v-btn>
     </v-app-bar-nav-icon>
 
-    <v-toolbar-title>校務章則系統</v-toolbar-title>
+    <v-toolbar-title>行政章則彙編平台</v-toolbar-title>
     <v-spacer></v-spacer>
     <template v-if="userinfo">
       <v-chip class="ma-1" label>
