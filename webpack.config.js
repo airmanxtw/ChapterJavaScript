@@ -7,13 +7,13 @@ const mainjs={
         main:['./src/main.js'],            
     },    
     output: {
-        filename: '[name].0.3.11.js',
+        filename: '[name].0.3.14.js',
         path:'C:/Users/airmanx/source/repos/Chapter/Chapter/Scripts/dist'
         //path: path.resolve(__dirname, 'dist')
 
     },
-    //mode: 'development',
-    mode:'production',
+    mode: 'development',
+    //mode:'production',
     module: {
         rules: [
             {
@@ -89,7 +89,7 @@ const mainforIEjs={
         mainforIE:['babel-polyfill','./src/mainforIE.js'],
     },    
     output: {
-        filename: '[name].0.3.11.js',
+        filename: '[name].0.3.14.js',
         path:'C:/Users/airmanx/source/repos/Chapter/Chapter/Scripts/dist'
         //path: path.resolve(__dirname, 'dist')
 
@@ -168,6 +168,6 @@ const mainforIEjs={
     target: ['web', 'es5']
 };
 
-module.exports = [mainjs,mainforIEjs];
+//module.exports = [mainjs,mainforIEjs];
 
-//module.exports = [mainjs];
+module.exports = [mainjs];

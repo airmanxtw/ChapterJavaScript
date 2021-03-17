@@ -118,9 +118,6 @@ export default {
           // always executed
         });
     },
-    absURL: function () {
-      return window.location.origin + this.absURL;
-    },
   },
   computed: {
     ...mapState(["absURL", "loginuser"]),

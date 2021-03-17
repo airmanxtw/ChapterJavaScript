@@ -37,9 +37,11 @@ export default {
     },
     setHistory: function (val) {
       var value = val;
-      var newurl =
-        this.actionURL + (value != -1 && value != undefined ? "/" + value : "");
-      window.history.pushState(null, null, newurl);
+      // var newurl =
+      //   this.actionURL + (value != -1 && value != undefined ? "/" + value : "");
+      var newurl = this.absURL + (value != -1 && value != undefined ? "/" + value : "");
+
+      window.history.replaceState(null, null, newurl);
     },
     getalldirectorys: function (_activeid) {
       var THIS = this;
@@ -68,7 +70,7 @@ export default {
           // always executed
         });
     },
-    addItems: function (item) {      
+    addItems: function (item) {
       var target = this.finditems(this.$refs.navi.items, item.parent_id);
       target.children.push(item);
       target.children = this.sortitems(target.children);

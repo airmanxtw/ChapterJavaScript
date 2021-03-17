@@ -129,7 +129,11 @@
             <v-list-item-subtitle>{{ dir.Desc }}</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action>
-            <v-btn icon v-if="canmodify" @click.stop="openUpdateDir(dir.id)">
+            <v-btn
+              icon
+              v-if="canmodify && !dir.Readonly"
+              @click.stop="openUpdateDir(dir.id)"
+            >
               <v-icon>mdi-cog-outline</v-icon>
             </v-btn>
           </v-list-item-action>
